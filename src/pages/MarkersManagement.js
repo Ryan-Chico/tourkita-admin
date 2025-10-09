@@ -6,7 +6,7 @@ import { db } from '../firebase';
 import MarkerFormModal from '../components/MarkerFormModal';
 import EventFormModal from "../components/EventFormModal";
 import EventCalendar from "../components/EventCalendar";
-
+import AdminMapTool from '../components/AdminMapTool';
 
 const getEmptyForm = () => ({
     id: '',
@@ -390,7 +390,7 @@ const MarkersManagement = () => {
                     )
                 }
 
-
+                <AdminMapTool />
             </main >
         </div >
     );

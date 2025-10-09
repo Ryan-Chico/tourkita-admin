@@ -11,7 +11,7 @@ import FeedbackReview from './pages/FeedbackReview';
 import NotificationManagement from './pages/NotificationManagement';
 import AnalysisReport from './pages/AnalysisReport';
 import MarkersManagement from './pages/MarkersManagement';
-import ARManagement from './pages/ArManagement';
+import ARManagement from './pages/ARManagement';
 import ContentManagement from './pages/ContentManagement';
 import FAQScreen from './pages/FAQScreen';
 import TermsOfServiceScreen from './pages/TermsOfServicesScreen';
@@ -38,6 +38,8 @@ function App() {
           <Route path="/markers-management" element={<ProtectedRoute><MarkersManagement /></ProtectedRoute>} />
           <Route path="/ar-management" element={<ProtectedRoute><ARManagement /></ProtectedRoute>} />
           <Route path="/content-management" element={<ProtectedRoute><ContentManagement /></ProtectedRoute>} />
+        
+
         </Routes>
       </Router>
     </AuthProvider>
