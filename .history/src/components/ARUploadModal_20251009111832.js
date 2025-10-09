@@ -39,7 +39,7 @@ const ARUploadModal = ({ markers, onClose }) => {
             const data = new FormData();
             data.append("file", file);
 
-            let resourceType = "raw";
+            let resourceType = "raw"; // default for 3D models / audio
             if (type === "image") resourceType = "image";
             else if (type === "video") resourceType = "video";
 

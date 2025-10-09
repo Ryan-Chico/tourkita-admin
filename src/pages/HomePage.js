@@ -8,7 +8,6 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Scroll-triggered animations
         const fadeElements = document.querySelectorAll('.fade-in, .fade-in-up, .fade-in-left, .fade-in-right, .fade-in-zoom');
         const handleScroll = () => {
             fadeElements.forEach(el => {
