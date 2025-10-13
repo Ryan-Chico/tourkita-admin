@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserManagement.css';
 import Sidebar from '../components/Sidebar';
-import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import ExportButtons from '../components/ExportButtons';
 
@@ -36,32 +36,32 @@ const UserManagement = () => {
         }));
     };
 
-
     useEffect(() => {
-        const fetchUsers = async () => {
-            setLoading(true);
-            try {
-                const usersSnapshot = await getDocs(collection(db, 'users'));
-                const registeredUsers = usersSnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: data.uid || doc.id,
-                        email: data.email || '',
-                        name: `${data.firstName || ''} ${data.middleInitial || ''} ${data.lastName || ''}`.trim(),
-                        age: data.age || '',
-                        gender: data.gender || '',
-                        contactNumber: data.contactNumber || '',
-                        status: 'registered',
-                        activestatus: data.activestatus ?? false,
-                        userType: data.userType || '',
-                        registeredDate: data.createdAt
-                            ? new Date(data.createdAt.toDate?.() || data.createdAt).toLocaleDateString()
-                            : 'N/A',
-                    };
-                });
+        setLoading(true);
+        const usersRef = collection(db, 'users');
+        const guestsRef = collection(db, 'guests');
 
-                const guestsSnapshot = await getDocs(collection(db, 'guests'));
-                const guestUsers = guestsSnapshot.docs.map(doc => {
+        const unsubscribeUsers = onSnapshot(usersRef, (snapshot) => {
+            const registeredUsers = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: data.uid || doc.id,
+                    email: data.email || '',
+                    name: `${data.firstName || ''} ${data.middleInitial || ''} ${data.lastName || ''}`.trim(),
+                    age: data.age || '',
+                    gender: data.gender || '',
+                    contactNumber: data.contactNumber || '',
+                    status: 'registered',
+                    activestatus: data.activeStatus ?? false,
+                    userType: data.userType || '',
+                    registeredDate: data.createdAt
+                        ? new Date(data.createdAt.toDate?.() || data.createdAt).toLocaleDateString()
+                        : 'N/A',
+                };
+            });
+
+            const unsubscribeGuests = onSnapshot(guestsRef, (guestSnap) => {
+                const guestUsers = guestSnap.docs.map(doc => {
                     const data = doc.data();
                     return {
                         id: data.guestId || doc.id,
@@ -71,7 +71,7 @@ const UserManagement = () => {
                         gender: '',
                         contactNumber: '',
                         status: 'guest',
-                        activestatus: data.activestatus ?? false,
+                        activestatus: data.activeStatus ?? false,
                         userType: 'Guest',
                         registeredDate: data.createdAt
                             ? new Date(data.createdAt.toDate?.() || data.createdAt)
@@ -79,16 +79,14 @@ const UserManagement = () => {
                     };
                 });
 
-                const allUsers = [...registeredUsers, ...guestUsers];
-                setUsers(allUsers);
-            } catch (error) {
-                console.error('Error fetching users and guests:', error);
-            } finally {
+                setUsers([...registeredUsers, ...guestUsers]);
                 setLoading(false);
-            }
-        };
+            });
 
-        fetchUsers();
+            return () => unsubscribeGuests();
+        });
+
+        return () => unsubscribeUsers();
     }, []);
 
     const handleArchive = async (userId, reason) => {
@@ -122,13 +120,11 @@ const UserManagement = () => {
             setUsers(updatedUsers);
 
             alert(`✅ User ${userData.email || userId} has been archived.`);
-
         } catch (error) {
             console.error('Error archiving user:', error);
             alert('Error archiving user. See console for details.');
         }
     };
-
 
     const handleWarnAndArchive = (userId) => {
         const reason = prompt(`Enter a reason to archive User ID: ${userId}`);
@@ -136,7 +132,6 @@ const UserManagement = () => {
             handleArchive(userId, reason);
         }
     };
-
 
     const filterUsers = () => {
         return users.filter(user => {
@@ -156,7 +151,7 @@ const UserManagement = () => {
             const matchesDateTo = dateTo ? new Date(user.registeredDate) <= new Date(dateTo) : true;
 
             return matchesSearch && matchesFilter && matchesDateFrom && matchesDateTo;
-        }).sort((a, b) => new Date(b.registeredDate) - new Date(a.registeredDate)); // newest first
+        }).sort((a, b) => new Date(b.registeredDate) - new Date(a.registeredDate));
     };
 
     const countByStatus = (statusType) => users.filter(u => u.status === statusType).length;
@@ -177,6 +172,8 @@ const UserManagement = () => {
     const onlineOfflineFiltered = countOnlineOffline();
     const onlineCount = onlineOfflineFiltered.filter(u => u.activestatus).length;
     const offlineCount = onlineOfflineFiltered.filter(u => !u.activestatus).length;
+    const onlineGuestCount = users.filter(u => u.status === 'guest' && u.activestatus).length;
+    const offlineGuestCount = users.filter(u => u.status === 'guest' && !u.activestatus).length;
 
     const getStatusColor = (activestatus) => {
         return activestatus ? 'green' : 'red';
@@ -187,42 +184,69 @@ const UserManagement = () => {
             <Sidebar />
             <main className="dashboard-main">
                 <h2>User Management</h2>
+
                 <div className="main-content">
-
-
                     <div className="summary-row">
                         {loading ? (
                             <div className="user-count-summary">
-                                {[1, 2, 3, 4].map(i => (
+                                {[...Array(8)].map((_, i) => (
                                     <div key={i} className="count-box skeleton"></div>
                                 ))}
                             </div>
                         ) : (
                             <div className="user-count-summary">
-                                <div className="count-box"><span className="label">All Users</span><span className="count">{totalUsers}</span></div>
-                                <div className="count-box"><span className="label">Registered</span><span className="count">{registeredCount}</span></div>
-                                <div className="count-box"><span className="label">Guests</span><span className="count">{guestCount}</span></div>
-                                <div className="count-box"><span className="label">Archived</span><span className="count">{archivedCount}</span></div>
+                                <div className="count-box">
+                                    <span className="label">All Users</span>
+                                    <span className="count">{totalUsers}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Registered</span>
+                                    <span className="count">{registeredCount}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Guests</span>
+                                    <span className="count">{guestCount}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Archived</span>
+                                    <span className="count">{archivedCount}</span>
+                                </div>
+
+                                <div className="count-box">
+                                    <span className="label">Online Users</span>
+                                    <span className="count">{onlineCount}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Offline Users</span>
+                                    <span className="count">{offlineCount}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Online Guests</span>
+                                    <span className="count">{onlineGuestCount}</span>
+                                </div>
+                                <div className="count-box">
+                                    <span className="label">Offline Guests</span>
+                                    <span className="count">{offlineGuestCount}</span>
+                                </div>
                             </div>
                         )}
-
-                        <div className="online-status-summary">
-                            <h3>User Online Status</h3>
-                            {loading ? (
-                                <div className="status-counts">
-                                    <div className="count-box skeleton"></div>
-                                    <div className="count-box skeleton"></div>
-                                </div>
-                            ) : (
-                                <div className="status-counts">
-                                    <div className="count-box"><span className="label">Online</span><span className="count">{onlineCount}</span></div>
-                                    <div className="count-box"><span className="label">Offline</span><span className="count">{offlineCount}</span></div>
-                                </div>
-                            )}
-                        </div>
                     </div>
 
-                    {/* Top row: Tabs + Date Range */}
+                    <div className="online-status-summary">
+                        <h3>User Online Status</h3>
+                        {loading ? (
+                            <div className="status-counts">
+                                <div className="count-box skeleton"></div>
+                                <div className="count-box skeleton"></div>
+                            </div>
+                        ) : (
+                            <div className="status-counts">
+                                <div className="count-box"><span className="label">Online</span><span className="count">{onlineCount}</span></div>
+                                <div className="count-box"><span className="label">Offline</span><span className="count">{offlineCount}</span></div>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="tab-date-row">
                         <div className="tab-bar markers-tabs">
                             {['all', 'registered', 'archived'].map(tab => (
@@ -236,12 +260,12 @@ const UserManagement = () => {
                             ))}
                             <div className="top-row">
                                 <div className="column-dropdown">
-                                    <buttons
+                                    <button
                                         className="dropdown-btn"
                                         onClick={() => setShowDropdown(prev => !prev)}
                                     >
                                         Columns ▼
-                                    </buttons>
+                                    </button>
                                     {showDropdown && (
                                         <div className="dropdown-content">
                                             {Object.keys(columnVisibility).map(col => (
@@ -257,7 +281,6 @@ const UserManagement = () => {
                                         </div>
                                     )}
                                 </div>
-
 
                                 <div className="date-filters">
                                     <input
@@ -275,7 +298,6 @@ const UserManagement = () => {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="bottom-row">
                             <input
