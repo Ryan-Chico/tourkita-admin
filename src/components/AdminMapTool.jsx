@@ -26,29 +26,46 @@ export default function AdminMapTool() {
 
 
   useEffect(() => {
-    const mapInstance = new mapboxgl.Map({
-      container: "admin-map",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [120.973, 14.592],
-      zoom: 15,
-    });
+    const timeout = setTimeout(() => {
+      const container = document.getElementById("admin-map");
+      if (!container) return;
 
-    const drawControl = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: { polygon: true, point: true, line_string: true, trash: true },
-    });
+      const mapInstance = new mapboxgl.Map({
+        container: "admin-map",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [120.973, 14.592],
+        zoom: 15,
+      });
 
-    mapInstance.addControl(drawControl);
-    setMap(mapInstance);
-    setDraw(drawControl);
+      const drawControl = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: { polygon: true, point: true, line_string: true, trash: true },
+      });
 
-    mapInstance.on("draw.create", (e) => setGeometry(e.features[0].geometry));
-    mapInstance.on("draw.update", (e) => setGeometry(e.features[0].geometry));
+      mapInstance.addControl(drawControl);
+      setMap(mapInstance);
+      setDraw(drawControl);
 
-    return () => mapInstance.remove();
+      mapInstance.on("draw.create", (e) => setGeometry(e.features[0].geometry));
+      mapInstance.on("draw.update", (e) => setGeometry(e.features[0].geometry));
+
+     
+      mapInstance.on("load", () => {
+        mapInstance.resize();
+      });
+
+      window.addEventListener("resize", () => mapInstance.resize());
+
+      return () => {
+        mapInstance.remove();
+        window.removeEventListener("resize", () => mapInstance.resize());
+      };
+    }, 250); 
+
+    return () => clearTimeout(timeout);
   }, []);
 
- 
+  
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "customLandmarks"), (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
@@ -60,6 +77,7 @@ export default function AdminMapTool() {
     return () => unsubscribe();
   }, []);
 
+  // ✅ Save new landmark
   const saveToFirebase = async () => {
     if (!geometry) return alert("Draw a shape first!");
     if (!name.trim()) return alert("Please enter a landmark name!");
@@ -74,8 +92,8 @@ export default function AdminMapTool() {
 
       alert("Highlight saved successfully!");
       setName("");
-      setColor("#ecb10cff");
-      draw.deleteAll();
+      setColor("#FF0000");
+      draw?.deleteAll();
       setGeometry(null);
     } catch (error) {
       console.error("Error saving highlight:", error);
@@ -83,6 +101,7 @@ export default function AdminMapTool() {
     }
   };
 
+  // ✅ Delete landmark
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this highlight?")) return;
 
@@ -99,64 +118,74 @@ export default function AdminMapTool() {
   useEffect(() => {
     if (!map) return;
 
-    landmarks.forEach((landmark) => {
-      const sourceId = `source-${landmark.id}`;
-      const layerId = `layer-${landmark.id}`;
+    const drawLandmarks = () => {
+      landmarks.forEach((landmark) => {
+        const sourceId = `source-${landmark.id}`;
+        const layerId = `layer-${landmark.id}`;
 
+        if (map.getLayer(layerId)) map.removeLayer(layerId);
+        if (map.getSource(sourceId)) map.removeSource(sourceId);
 
-      if (map.getLayer(layerId)) map.removeLayer(layerId);
-      if (map.getSource(sourceId)) map.removeSource(sourceId);
-
-      let geometry = landmark.geometry;
-      if (typeof geometry === "string") {
-        try {
-          geometry = JSON.parse(geometry);
-        } catch {
-          console.warn("Invalid geometry:", landmark.id);
-          return;
+        let geometry = landmark.geometry;
+        if (typeof geometry === "string") {
+          try {
+            geometry = JSON.parse(geometry);
+          } catch {
+            console.warn("Invalid geometry:", landmark.id);
+            return;
+          }
         }
-      }
 
-      map.addSource(sourceId, {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          geometry,
-          properties: { name: landmark.name, color: landmark.color },
-        },
+        map.addSource(sourceId, {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry,
+            properties: { name: landmark.name, color: landmark.color },
+          },
+        });
+
+        map.addLayer({
+          id: layerId,
+          type:
+            geometry.type === "Polygon"
+              ? "fill"
+              : geometry.type === "Point"
+                ? "circle"
+                : geometry.type === "LineString"
+                  ? "line"
+                  : "circle",
+          source: sourceId,
+          paint:
+            geometry.type === "Polygon"
+              ? { "fill-color": landmark.color, "fill-opacity": 0.6 }
+              : geometry.type === "Point"
+                ? { "circle-radius": 6, "circle-color": landmark.color }
+                : geometry.type === "LineString"
+                  ? { "line-color": landmark.color || "#FF0000", "line-width": 3 }
+                  : {},
+        });
+
+        map.off("click", layerId);
+        map.on("click", layerId, () => handleDelete(landmark.id));
       });
 
-      map.addLayer({
-        id: layerId,
-        type:
-          geometry.type === "Polygon"
-            ? "fill"
-            : geometry.type === "Point"
-              ? "circle"
-              : geometry.type === "LineString"
-                ? "line"
-                : "circle",
-        source: sourceId,
-        paint:
-          geometry.type === "Polygon"
-            ? { "fill-color": landmark.color, "fill-opacity": 0.6 }
-            : geometry.type === "Point"
-              ? { "circle-radius": 6, "circle-color": landmark.color }
-              : geometry.type === "LineString"
-                ? { "line-color": landmark.color || "#FF0000", "line-width": 3 }
-                : {},
-      });
+      map.resize();
+    };
 
-     
-      map.off("click", layerId);
-      map.on("click", layerId, () => handleDelete(landmark.id));
-    });
+    if (map.isStyleLoaded()) {
+      drawLandmarks();
+    } else {
+      map.once("style.load", drawLandmarks);
+    }
+
   }, [landmarks, map]);
+
 
   return (
     <div>
       <div className="filter-container" style={{ marginBottom: "15px" }}>
-        <div className="chart-filters row-flex ">
+        <div className="chart-filters row-flex">
           <div className="filter-group">
             <label>Landmark Name:</label>
             <input
@@ -173,6 +202,7 @@ export default function AdminMapTool() {
               }}
             />
           </div>
+
           <div className="filter-group">
             <label>Color:</label>
             <input
@@ -182,22 +212,30 @@ export default function AdminMapTool() {
               style={{ marginLeft: "5px" }}
             />
           </div>
+
           <button
             className="pdf-btn"
             onClick={saveToFirebase}
-            style={{ marginLeft: "15px", backgroundColor:"#493628", alignSelf:"flex-end" }}
+            style={{
+              marginLeft: "15px",
+              backgroundColor: "#493628",
+              alignSelf: "flex-end",
+            }}
           >
             Save Highlight
           </button>
         </div>
       </div>
+
       <div
         id="admin-map"
         style={{
           width: "100%",
           height: "75vh",
+          minHeight: "400px",
           borderRadius: "12px",
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          display: "block",
         }}
       />
     </div>
