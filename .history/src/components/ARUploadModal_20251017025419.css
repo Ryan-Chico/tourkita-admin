@@ -1,0 +1,125 @@
+.upload-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.upload-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: fadeInScale 0.3s ease-in-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.upload-form h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    font-family: 'Georgia', serif;
+}
+
+.upload-form label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.upload-form input,
+.upload-form textarea,
+.upload-form select {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.arform-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    gap: 1rem;
+}
+
+.arform-actions button {
+    flex: 1;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.arform-actions button[type="submit"] {
+    background-color: #22c55e;
+    color: white;
+}
+
+.arform-actions button[type="button"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+.arform-actions button:hover {
+    opacity: 0.95;
+}
+
+.upload-form label select:focus {
+    border-color: #6b4106;
+    outline: none;
+}
+
+.upload-status {
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    /* Starts at 0 */
+    height: 100%;
+    background-color: #4caf50;
+    /* A nice green color */
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
+    /* Smooth transition */
+}

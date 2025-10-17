@@ -1,0 +1,110 @@
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #ffffff;
+}
+
+.download-banner {
+    position: absolute;
+    bottom: 50px;
+    left: 35%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.download-buttons {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.download-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    width: 100%;
+    max-width: 250px;
+}
+
+.download-btn.android {
+    background-color: #3DDC84;
+    color: #000;
+}
+
+.download-btn.ios {
+    background-color: #007AFF;
+    color: #fff;
+}
+
+.download-btn:hover {
+    opacity: 0.85;
+}
+
+@media (min-width: 600px) {
+    .download-banner {
+        padding: 30px 40px;
+    }
+
+    .download-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .download-btn {
+        width: auto;
+    }
+
+    .carousel-dots {
+        bottom: 30px;
+    }
+}

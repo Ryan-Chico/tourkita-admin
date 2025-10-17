@@ -1,0 +1,104 @@
+/* --- Page Layout & Header --- */
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    color: #2c1d13;
+    margin-bottom: 0.25rem;
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* --- Top Controls (Add Button) --- */
+.top-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.top-controls button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #493628;
+    color: #fff;
+    padding: 0.7rem 1.3rem;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.top-controls button:hover {
+    background-color: #2c1d13;
+    transform: translateY(-2px);
+}
+
+/* --- Grid for the Cards --- */
+.markers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: #f9f9f9;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Loading Overlay Styles --- */
+.card-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 12px;
+    backdrop-filter: blur(2px);
+}
+
+/* --- New Spinner Style --- */
+.card-loading-overlay .spinner {
+    font-size: 2.5rem;
+    /* Controls the size of the icon */
+    color: #493628;
+    /* A color from your theme */
+    animation: spin 1s linear infinite;
+    /* Applies the infinite spin animation */
+}
+
+/* --- Style for Disabled Buttons --- */
+.card-actions button:disabled {
+    background-color: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+}
+

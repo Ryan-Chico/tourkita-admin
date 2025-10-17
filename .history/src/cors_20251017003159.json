@@ -1,0 +1,21 @@
+[
+    {
+        "origin": [
+            "http://localhost:3000",
+            "https://admin-login-244c5.web.app",
+            "https://admin-login-244c5.firebaseapp.com"
+        ],
+        "method": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "HEAD"
+        ],
+        "maxAgeSeconds": 3600,
+        "responseHeader": [
+            "Content-Type",
+            "x-goog-meta-*"
+        ]
+    }
+]

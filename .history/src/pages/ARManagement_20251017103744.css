@@ -1,0 +1,144 @@
+/* --- Page Layout & Header --- */
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    color: #2c1d13;
+    margin-bottom: 0.25rem;
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* --- Top Controls (Add Button) --- */
+.top-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.top-controls button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #493628;
+    color: #fff;
+    padding: 0.7rem 1.3rem;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.top-controls button:hover {
+    background-color: #2c1d13;
+    transform: translateY(-2px);
+}
+
+/* --- Grid for the Cards --- */
+.markers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+/* --- Marker Card Styling --- */
+.marker-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.marker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.marker-card-image {
+    width: 100%;
+    height: 160px;
+}
+
+.marker-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.marker-card-content {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.marker-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c1d13;
+    margin: 0 0 0.5rem 0;
+}
+
+.marker-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- Card Actions (Buttons) --- */
+.card-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0 1rem 1rem;
+}
+
+.card-actions button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.6rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.card-actions .edit-btn {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.card-actions .edit-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.card-actions .delete-btn {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.card-actions .delete-btn:hover {
+    background-color: #f5c6cb;
+}
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: #f9f9f9;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+}

@@ -1,0 +1,391 @@
+/* --- Base Mobile-First Styles --- */
+.home-wrapper {
+    font-family: 'Segoe UI', sans-serif;
+    background: #fdfaf5;
+    /* A slightly warmer white */
+    padding-top: 70px;
+    /* Space for the fixed header */
+}
+
+/* --- Header --- */
+.home-header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-logo {
+    height: 36px;
+}
+
+.header-title {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #8b5e3c;
+}
+
+/* Hide desktop nav on mobile */
+.header-right {
+    display: none;
+}
+
+/* --- Carousel & Hero Section --- */
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 80svh;
+    /* Use small viewport height to prevent layout jumps on mobile */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.carousel-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 50%), linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 40%);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    width: 90%;
+    color: #fff;
+}
+
+.hero-overlay h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.hero-overlay p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.download-banner {
+    position: absolute;
+    bottom: 80px;
+    /* More space for carousel dots */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    z-index: 2;
+}
+
+.download-banner h2 {
+    font-size: 1.2rem;
+    margin: 0 0 8px 0;
+}
+
+.download-banner p {
+    font-size: 0.9rem;
+    margin: 0 0 16px 0;
+}
+
+.download-btn {
+    width: 100%;
+}
+
+/* --- Hamburger Menu --- */
+.hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.hamburger-menu .bar {
+    width: 30px;
+    height: 3px;
+    background-color: #8b5e3c;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu.active .bar:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburger-menu.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active .bar:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* --- Mobile Navigation Panel --- */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70%;
+    max-width: 280px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+    /* Space below header */
+}
+
+.mobile-nav.active {
+    transform: translateX(0);
+}
+
+.mobile-nav-link {
+    background: none;
+    border: none;
+    color: #8b5e3c;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 16px 24px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+}
+
+.mobile-nav-link:hover {
+    background: rgba(139, 94, 60, 0.1);
+}
+
+/* --- Info & Content Sections --- */
+.info-slides-section,
+.how-tourkita-works,
+.about-us-section,
+.partnership-section {
+    padding: 60px 20px;
+}
+
+.info-slides,
+.tourkita-steps-container,
+.about-us-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #1c3d5a;
+}
+
+.info-card p {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: #1c3d5a;
+    color: #fff;
+    padding: 24px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo {
+    height: 30px;
+    filter: brightness(0) invert(1);
+}
+
+.footer-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-link {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* --- Fade-in Animations --- */
+.fade-in,
+.fade-in-up,
+.fade-in-left,
+.fade-in-right,
+.fade-in-zoom {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-up {
+    transform: translateY(30px);
+}
+
+.fade-in-left {
+    transform: translateX(-30px);
+}
+
+.fade-in-right {
+    transform: translateX(30px);
+}
+
+.fade-in-zoom {
+    transform: scale(0.9);
+}
+
+.visible {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+}
+
+/* --- Tablet & Desktop Styles --- */
+@media (min-width: 768px) {
+    .home-wrapper {
+        padding-top: 80px;
+    }
+
+    .header-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .hamburger-menu,
+    .mobile-nav {
+        display: none;
+    }
+
+    .home-header {
+        padding: 14px 40px;
+    }
+
+    .header-logo {
+        height: 42px;
+    }
+
+    .header-title {
+        font-size: 24px;
+    }
+
+    .header-link,
+    .header-button {
+        font-size: 15px;
+    }
+
+    .header-button {
+        padding: 10px 18px;
+    }
+
+    .carousel-wrapper {
+        height: 100vh;
+    }
+
+    .hero-overlay h1 {
+        font-size: 3rem;
+    }
+
+    .hero-overlay p {
+        font-size: 1.2rem;
+    }
+
+    .download-banner {
+        bottom: 40px;
+        padding: 30px 40px;
+    }
+
+    .info-slides-section,
+    .how-tourkita-works,
+    .about-us-section {
+        padding: 100px 20px;
+    }
+
+    .info-slides {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tourkita-steps-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .about-us-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .footer-right {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+}

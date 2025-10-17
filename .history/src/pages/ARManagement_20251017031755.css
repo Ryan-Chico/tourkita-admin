@@ -1,0 +1,193 @@
+/* Main Dashboard Structure */
+.dashboard-main {
+    display: flex;
+    background-color: #f9f9f9;
+}
+
+.dashboard-section {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Header Section */
+.ar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.ar-title {
+    font-size: 2.5rem;
+    /* Increased size for impact */
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.ar-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 0.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Controls */
+.ar-top-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ar-top-controls button {
+    background-color: #493628;
+    /* A rich, earthy brown */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.ar-top-controls button:hover {
+    background-color: #5e4a3c;
+    transform: translateY(-2px);
+}
+
+/* Grid for the Cards */
+.ar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Slightly wider cards */
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+/* Individual Asset Cards */
+.ar-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    /* Important for the image container */
+    display: flex;
+    flex-direction: column;
+}
+
+.ar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.ar-card-image {
+    width: 100%;
+    height: 180px;
+    background-color: #f0f0f0;
+}
+
+.ar-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures the image covers the area nicely */
+}
+
+.ar-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 1rem 1rem 0.25rem;
+    font-family: 'Georgia', serif;
+}
+
+.ar-card-meta {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0 1rem 0.75rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.ar-card-links {
+    margin: 0.5rem 1rem 0.5rem;
+    /* Adjusted margin */
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.ar-card-links a {
+    text-decoration: none;
+    font-family: 'Segoe UI', sans-serif;
+    color: #AB886D;
+    /* A soft, elegant brown for links */
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.ar-card-links a:hover {
+    background-color: #f7f7f7;
+    color: #493628;
+    border-color: #ccc;
+}
+
+/* Styles for Edit/Delete buttons */
+.ar-card-actions {
+    margin: 0.5rem 1rem 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.ar-card-actions button {
+    font-family: 'Segoe UI', sans-serif;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.ar-action-btn--edit {
+    background-color: #e8f0fe;
+    color: #4285f4;
+}
+
+.ar-action-btn--edit:hover {
+    background-color: #dce9fd;
+}
+
+.ar-action-btn--delete {
+    background-color: #fce8e6;
+    color: #ea4335;
+}
+
+.ar-action-btn--delete:hover {
+    background-color: #fbdcda;
+}
+
+
+/* State for when no assets are found */
+.ar-empty-state {
+    text-align: center;
+    padding: 4rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

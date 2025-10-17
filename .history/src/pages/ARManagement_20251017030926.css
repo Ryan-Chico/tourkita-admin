@@ -1,0 +1,69 @@
+.ar-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    font-family: 'Georgia', serif;
+}
+
+.ar-top-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ar-top-controls button {
+    background-color: #493628;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ar-top-controls button:hover {
+    background-color: #5e3c21;
+}
+
+.ar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.ar-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.ar-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0.5rem 0 0.25rem;
+    font-family: 'Georgia', serif;
+}
+
+.ar-card p {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0;
+}
+
+.ar-icon {
+    margin-bottom: 10px;
+    color: #AB886D;
+}

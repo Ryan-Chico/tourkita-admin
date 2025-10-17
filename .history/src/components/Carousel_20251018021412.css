@@ -1,0 +1,125 @@
+/* Use a more stable viewport height unit for mobile to avoid layout shifts */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    /* svh = Small Viewport Height */
+    overflow: hidden;
+}
+
+/* This inner container holds all images in a row */
+.carousel-inner {
+    display: flex;
+    height: 100%;
+    /* Smooth transition for both auto-play and manual dot clicks */
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    /* Prevents images from shrinking */
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+}
+
+/* Styles for the navigation dots */
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    /* Position dots above the bottom edge */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    /* Space between dots */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #ffffff;
+}
+
+/* -- Banner Styles (making them responsive) -- */
+.download-banner {
+    position: absolute;
+    bottom: 50px;
+    /* Increased bottom spacing to not overlap dots */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 20px;
+    /* Reduced padding for smaller screens */
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    /* Use width instead of max-width for better control */
+    max-width: 500px;
+    /* Set a max-width for larger screens */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.download-buttons {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.download-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    width: 100%;
+    max-width: 250px;
+}
+
+.download-btn.android {
+    background-color: #3DDC84;
+    color: #000;
+}
+
+.download-btn.ios {
+    background-color: #007AFF;
+    color: #fff;
+}
+
+.download-btn:hover {
+    opacity: 0.85;
+}
+
+@media (min-width: 600px) {
+    .download-banner {
+        padding: 30px 40px;
+    }
+
+    .download-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .download-btn {
+        width: auto;
+    }
+
+    .carousel-dots {
+        bottom: 30px;
+    }
+}

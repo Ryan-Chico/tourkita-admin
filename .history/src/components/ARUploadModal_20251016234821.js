@@ -1,0 +1,272 @@
+import React, { useState } from "react";
+import { db, storage } from "../firebase"; // Assuming '../firebase' is where firebaseConfig.js is imported and exports db/storage
+import {
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+} from "firebase/storage";
+import {
+    collection,
+    addDoc,
+    updateDoc,
+    doc,
+    serverTimestamp,
+    setDoc,
+} from "firebase/firestore";
+import "./ARUploadModal.css";
+
+const ARUploadModal = ({ markers, onClose }) => {
+    const [formData, setFormData] = useState({
+        description: "",
+        image: null,
+        model: null,
+        video: null,
+        location: "",
+        physicalWidth: 0.15, // Default width in meters
+    });
+
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    // Handle input text/select change
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    // Handle file change
+    const handleFileChange = (e) => {
+        const { name, files } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: files[0] }));
+        console.log(`File selected for ${name}:`, files[0]);
+    };
+
+    // Upload helper with extended retry
+    const uploadToFirebase = (file, folder) => {
+        return new Promise((resolve, reject) => {
+            if (!file) {
+                console.warn(`No file provided for folder: ${folder}`);
+                resolve(null);
+                return;
+            }
+
+            const uniqueName = `${Date.now()}_${file.name}`;
+            const storageRef = ref(storage, `${folder}/${uniqueName}`);
+
+            console.log(`📤 Starting upload: ${file.name} → ${folder}`);
+
+            // ⚡ Using uploadBytesResumable for progress tracking and extended retry
+            const uploadTask = uploadBytesResumable(storageRef, file, {
+                customMetadata: { uploadedAt: new Date().toISOString() },
+                maxRetryTime: Number.MAX_SAFE_INTEGER, // practically infinite retry
+            });
+
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const prog =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // Update overall progress (Note: This progress value will jump as each file completes)
+                    setProgress(prog.toFixed(0));
+                    console.log(`Progress (${folder}): ${prog.toFixed(0)}%`);
+                },
+                (error) => {
+                    console.error("❌ Upload error:", error);
+                    reject(error);
+                },
+                async () => {
+                    const url = await getDownloadURL(uploadTask.snapshot.ref);
+                    console.log(`✅ Upload complete for ${folder}:`, url);
+                    resolve(url);
+                }
+            );
+        });
+    };
+
+    // Handle form submit
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.image || !formData.model || !formData.location) {
+            alert("Please complete all required fields.");
+            return;
+        }
+
+        console.log("🧾 Form Data:", formData);
+
+        try {
+            setUploading(true);
+            setProgress(0);
+
+            // Upload all files concurrently
+            const [imageUrl, modelUrl, videoUrl] = await Promise.all([
+                uploadToFirebase(formData.image, "markers"),
+                uploadToFirebase(formData.model, "models"),
+                formData.video
+                    ? uploadToFirebase(formData.video, "videos")
+                    : Promise.resolve(null),
+            ]);
+
+            console.log("✅ All uploads complete", {
+                imageUrl,
+                modelUrl,
+                videoUrl,
+            });
+
+            // 🔹 1. Save to Firestore: arTargets (using location as doc ID)
+            await setDoc(doc(db, "arTargets", formData.location), {
+                id: formData.location,
+                description: formData.description,
+                imageUrl,
+                modelUrl,
+                videoUrl,
+                physicalWidth: parseFloat(formData.physicalWidth),
+                createdAt: serverTimestamp(),
+            });
+
+            // 🔹 2. Optional: add record to arMarkers
+            await addDoc(collection(db, "arMarkers"), {
+                name: formData.location,
+                description: formData.description,
+                imageUrl,
+                modelUrl,
+                videoUrl,
+                createdAt: serverTimestamp(),
+            });
+
+            // 🔹 3. Update the selected primary marker to show AR support
+            const selectedMarker = markers.find(
+                (m) => m.name === formData.location
+            );
+            if (selectedMarker) {
+                const markerRef = doc(db, "markers", selectedMarker.id);
+                await updateDoc(markerRef, {
+                    arCameraSupported: true,
+                    imageUrl, // Store AR target image URL with the marker
+                    modelUrl, // Store 3D model URL with the marker
+                });
+                console.log("📍 Marker updated:", selectedMarker.name);
+            }
+
+            alert("✅ AR Target uploaded successfully!");
+            onClose();
+        } catch (err) {
+            console.error("🔥 Upload failed:", err);
+            alert("Upload failed: " + err.message);
+        } finally {
+            setUploading(false);
+            setProgress(0);
+        }
+    };
+
+    return (
+        <div
+            className="upload-modal"
+            // Close modal if user clicks on the backdrop
+            onClick={(e) =>
+                e.target.classList.contains("upload-modal") && onClose()
+            }
+        >
+            <form className="upload-form" onSubmit={handleSubmit}>
+                <h2>Upload AR Target</h2>
+
+                <label>
+                    Location:
+                    <select
+                        name="location"
+                        value={formData.location}
+                        onChange={handleInputChange}
+                        required
+                    >
+                        <option value="">Select Location</option>
+                        {markers
+                            // Filter to show only markers that don't already have AR support
+                            .filter((m) => !m.arCameraSupported)
+                            .map((marker) => (
+                                <option key={marker.id} value={marker.name}>
+                                    {marker.name}
+                                </option>
+                            ))}
+                    </select>
+                </label>
+
+                <label>
+                    Description:
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleInputChange}
+                        rows="3"
+                    />
+                </label>
+
+                <label>
+                    Target Image (.jpg):
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        required
+                    />
+                </label>
+
+                <label>
+                    3D Model (.glb, .gltf):
+                    <input
+                        type="file"
+                        name="model"
+                        accept=".glb,.gltf"
+                        onChange={handleFileChange}
+                        required
+                    />
+                </label>
+
+                <label>
+                    AR Video (optional):
+                    <input
+                        type="file"
+                        name="video"
+                        accept="video/*"
+                        onChange={handleFileChange}
+                    />
+                </label>
+
+                <label>
+                    Physical Width (m):
+                    <input
+                        type="number"
+                        name="physicalWidth"
+                        step="0.01"
+                        value={formData.physicalWidth}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+
+                {uploading && (
+                    <div className="progress-bar">
+                        <p>Uploading... {progress}%</p>
+                        <div className="bar">
+                            <div
+                                className="fill"
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="arform-actions">
+                    <button type="submit" disabled={uploading}>
+                        {uploading ? "Uploading..." : "Submit"}
+                    </button>
+                    <button type="button" onClick={onClose}>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+};
+
+export default ARUploadModal
