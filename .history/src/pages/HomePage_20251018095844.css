@@ -181,6 +181,20 @@
     animation-delay: 0.6s;
 }
 
+.download-banner {
+    position: relative;
+    max-width: 300px;
+    background: rgba(28, 61, 90, 0.9);
+    margin: 3rem auto 0 auto;
+    color: #fff;
+    right: 30px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    z-index: 12;
+}
+
+
 
 .download-banner h2 {
     font-family: 'Georgia', serif;
@@ -644,7 +658,7 @@
         padding: 0 8px;
     }
 
-
+    
     .download-banner p {
         font-size: 13px;
     }

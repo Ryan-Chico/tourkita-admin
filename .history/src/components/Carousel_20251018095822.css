@@ -76,8 +76,19 @@
     max-width: 250px;
 }
 
+.download-btn.android {
+    background-color: #3DDC84;
+    color: #000;
+}
 
+.download-btn.ios {
+    background-color: #007AFF;
+    color: #fff;
+}
 
+.download-btn:hover {
+    opacity: 0.85;
+}
 
 @media (min-width: 600px) {
     .download-banner {
