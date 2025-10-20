@@ -1,0 +1,191 @@
+/* --- Root Variables for the TourKita System Theme --- */
+:root {
+    --primary-color: #6D4C41;
+    /* Rich, earthy brown */
+    --primary-hover: #5D4037;
+    --background-color: #F5F5F5;
+    /* A clean, modern light gray */
+    --card-background: #FFFFFF;
+    --text-dark: #3E2723;
+    --text-light: #757575;
+    --border-color: #E0E0E0;
+    --error-color: #C62828;
+    --font-heading: 'Lora', serif;
+    --font-body: 'Poppins', sans-serif;
+}
+
+/* --- Main Page Layout --- */
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    /* Subtle texture using a background image */
+    background-image: url('https://www.transparenttextures.com/patterns/clean-gray-paper.png');
+    padding: 20px;
+    font-family: var(--font-body);
+}
+
+/* --- The Login Card --- */
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* --- Card Header --- */
+.card-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    border: 3px solid var(--border-color);
+}
+
+.card-header h1 {
+    font-family: var(--font-heading);
+    color: var(--text-dark);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-header p {
+    color: var(--text-light);
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+/* --- Form and Input Styling --- */
+.login-form {
+    width: 100%;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 45px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background-color: #F9F9F9;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    background-color: #F9F9F9;
+    /* Match input background */
+    padding: 0 5px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+/* Floating label effect */
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+    top: 0;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    background-color: var(--card-background);
+    /* Lift it to the card's background */
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(109, 76, 65, 0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    transition: color 0.2s ease;
+}
+
+.input-group input:focus~.input-icon {
+    color: var(--primary-color);
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+/* --- Button and Messages --- */
+.login-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-button:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:disabled {
+    background-color: #BCAAA4;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background-color: rgba(198, 40, 40, 0.1);
+    color: var(--error-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

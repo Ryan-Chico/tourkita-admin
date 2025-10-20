@@ -1,0 +1,186 @@
+/* You can add this to the top of your index.css or App.css to use a cleaner font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.login-container {
+    height: 100vh;
+    background:
+        linear-gradient(rgba(60, 36, 21, 0.7), rgba(160, 121, 94, 0.7)),
+        url('https://images.unsplash.com/photo-1581167768311-e9b74e7168c1?auto=format&fit=crop&w=1470&q=80');
+    background-blend-mode: overlay;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    /* Using a more modern font */
+    padding: 20px;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    /* Slightly more blur */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+    /* Max width for responsiveness */
+    animation: fadeIn 0.8s ease-in-out;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.logo {
+    width: 150px;
+    /* Changed from height to width for better scaling */
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    opacity: 0.95;
+    transition: transform 0.3s;
+}
+
+.logo:hover {
+    animation: pulse 1.5s infinite;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e0e0e0;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+/* --- NEW: Style for the password visibility toggle --- */
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 14px 45px;
+    /* Adjusted padding for icons */
+    border: 1px solid #ffffff33;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.login-form input::placeholder {
+    color: #ccc;
+    letter-spacing: 0.5px;
+}
+
+.login-form input:focus {
+    border-color: #ffffffcc;
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.login-form button {
+    width: 100%;
+    padding: 14px;
+    background-color: #6e513d;
+    color: #E4E0E1;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    /* Bolder font */
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-form button:hover {
+    background-color: #594231;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* --- NEW: Style for the disabled/loading button state --- */
+.login-form button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.error-message {
+    color: #ffdddd;
+    background: rgba(140, 36, 36, 0.8);
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: 1px solid #883434;
+    animation: fadeIn 0.5s ease-out;
+    /* Add fade-in animation */
+}
+
+/* --- NEW: Accessibility helper class --- */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

@@ -1,0 +1,202 @@
+/* --- Root Variables for the Heritage Tech Theme --- */
+:root {
+    --primary-color: #8D6E63;
+    /* A muted, sophisticated stone brown */
+    --primary-hover: #795548;
+    --background-color: #EFEBE9;
+    /* Light stone gray background */
+    --card-background: #FFFFFF;
+    --text-dark: #4E342E;
+    --text-light: #78909C;
+    --border-color: #D7CCC8;
+    --error-color: #B71C1C;
+    --font-heading: 'Lora', serif;
+    --font-body: 'Poppins', sans-serif;
+}
+
+/* --- Main Page Layout --- */
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: var(--font-body);
+    /* Thematic background image for Intramuros */
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('https://images.unsplash.com/photo-1590921903133-e71a88b56877?auto=format&fit=crop&w=1920&q=80') center/cover;
+    background-color: var(--background-color);
+}
+
+/* --- The Login Card --- */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* --- Card Header --- */
+.card-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    border: 3px solid var(--border-color);
+}
+
+.card-header h1 {
+    font-family: var(--font-heading);
+    color: var(--text-dark);
+    font-size: 2.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-header p {
+    color: var(--text-light);
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+/* --- Form and Floating Label Inputs --- */
+.login-form {
+    width: 100%;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 28px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 40px 14px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background-color: var(--card-background);
+    transition: all 0.2s ease;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translateY(-50%);
+    color: #A0AEC0;
+    /* Lighter placeholder color */
+    background-color: var(--card-background);
+    padding: 0 5px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+    top: 0;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.15);
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #CBD5E0;
+    /* Lighter icon color */
+    transition: color 0.2s ease;
+}
+
+.input-group input:focus~.input-icon {
+    color: var(--primary-color);
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #A0AEC0;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+/* --- Button and Messages --- */
+.login-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-button:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:disabled {
+    background-color: #BCAAA4;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background-color: rgba(183, 28, 28, 0.1);
+    color: var(--error-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 30px 25px;
+    }
+
+    .card-header h1 {
+        font-size: 1.8rem;
+    }
+}

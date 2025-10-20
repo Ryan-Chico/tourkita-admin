@@ -1,0 +1,217 @@
+/* Ensure you have this font imported in your main index.css or App.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #8D5B4C;
+    /* A professional, earthy brown */
+    --primary-hover: #7a4f42;
+    --background-color: #FFFFFF;
+    --form-background: #F9FAFB;
+    --text-dark: #111827;
+    --text-light: #6B7280;
+    --border-color: #D1D5DB;
+    --error-color: #DC2626;
+}
+
+.login-page {
+    display: flex;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+}
+
+/* 1. Left Side: Illustration Panel */
+.login-illustration {
+    flex: 1;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1547297341-499b1a16d7a4?auto=format&fit=crop&w=987&q=80') center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+.illustration-content {
+    max-width: 400px;
+}
+
+.illustration-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.illustration-content p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* 2. Right Side: Form Panel */
+.login-form-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
+    padding: 2rem;
+    overflow-y: auto;
+    /* For smaller screens */
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.form-logo {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 0 auto 1.5rem;
+}
+
+.form-container h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* 3. Floating Label Input Groups */
+.input-group {
+    position: relative;
+    margin-bottom: 1.75rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 45px 14px 45px;
+    /* left, right padding for icons */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background-color: var(--background-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* The floating label */
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    background-color: var(--background-color);
+    padding: 0 5px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+/* Input focus and value-present states for the floating label */
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+    top: 0;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(141, 91, 76, 0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+/* 4. Button and Messages */
+.login-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 1rem;
+}
+
+.login-button:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.login-button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--error-color);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* 5. Responsive Design */
+@media (max-width: 768px) {
+    .login-illustration {
+        display: none;
+        /* Hide illustration on smaller screens */
+    }
+
+    .login-form-area {
+        justify-content: flex-start;
+        /* Align form to top on mobile */
+        padding-top: 4rem;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
