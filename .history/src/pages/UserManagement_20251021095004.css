@@ -253,11 +253,9 @@
 .user-table tr:hover {
     background-color: #fff7f0;
 }
-
-.tab-date-row {
-    margin-top: 10px;
+.tab-date-row{
+    margin-top: 1;
 }
-
 .archive-btn,
 .archived-btn {
     padding: 4px 10px;

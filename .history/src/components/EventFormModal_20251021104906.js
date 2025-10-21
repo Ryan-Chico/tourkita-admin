@@ -369,6 +369,7 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                     )}
 
 
+                    {/* Time (moved below recurrence) */}
                     <div className="field-group">
                         <label htmlFor="eventStartTime">Start Time:</label>
                         <input

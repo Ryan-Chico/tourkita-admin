@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./MarkerFormModal.css";
+import "./EventFormModal.css"; // You can rename this to EventFormModal.css
 import { getDocs, collection, doc, updateDoc, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import axios from "axios";
@@ -46,8 +46,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
         setImageFile(null);
     };
 
-
-
     useEffect(() => {
         const fetchMarkers = async () => {
             setLoadingLocations(true);
@@ -67,13 +65,7 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
 
         if (isOpen) fetchMarkers();
     }, [isOpen]);
-    const formatTime12Hour = (time24) => {
-        if (!time24) return "";
-        let [hours, minutes] = time24.split(":").map(Number);
-        const ampm = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12 || 12;
-        return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
-    };
+
     const handleChange = e => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -200,7 +192,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                 </h2>
 
                 <form onSubmit={handleSubmit} className="marker-form">
-                    {/* Location */}
                     <div className="field-group full-width">
                         <label htmlFor="locationId">Select Location:</label>
                         <select
@@ -220,7 +211,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
 
                         <small>Or pick a custom address on the map:</small>
 
-                        {/* Map Location Picker */}
                         <div style={{ pointerEvents: formData.locationId ? "none" : "auto", opacity: formData.locationId ? 0.5 : 1 }}>
                             <LocationPickerMap
                                 onLocationSelect={({ lng, lat, address }) => {
@@ -235,7 +225,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                             />
                         </div>
 
-                        {/* Show chosen address */}
                         {formData.customAddress && (
                             <p style={{ marginTop: "5px", fontStyle: "italic", color: "#555" }}>
                                 📍 Selected: {formData.customAddress}
@@ -243,7 +232,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         )}
                     </div>
 
-                    {/* Title */}
                     <div className="field-group full-width">
                         <label htmlFor="title">Event Title:</label>
                         <input
@@ -257,7 +245,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         />
                     </div>
 
-                    {/* Description */}
                     <div className="field-group full-width">
                         <label htmlFor="description">Description:</label>
                         <textarea
@@ -271,9 +258,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         />
                     </div>
 
-
-
-                    {/* Recurrence */}
                     <div className="field-group full-width">
                         <label>Recurrence:</label>
                         <select
@@ -286,7 +270,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         </select>
                     </div>
 
-                    {/* Dates */}
                     {formData.recurrence?.frequency === "once" && (
                         <div className="field-group">
                             <label htmlFor="startDate"> Date:</label>
@@ -316,8 +299,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                                     required
                                 />
                             </div>
-
-                            {/* End Date */}
                             <div className="field-group">
                                 <label htmlFor="endDate">End Date:</label>
                                 <input
@@ -330,8 +311,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                                     required
                                 />
                             </div>
-
-                            {/* Days of Week */}
                             <div className="field-group full-width">
                                 <label>Days of Week:</label>
                                 <div className="recurrence-days">
@@ -343,9 +322,7 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                                                 if (formData.recurrence?.daysOfWeek?.length === 7) {
                                                     handleRecurrenceChange("daysOfWeek", []);
                                                 } else {
-                                                    handleRecurrenceChange("daysOfWeek", [
-                                                        "sun", "mon", "tue", "wed", "thu", "fri", "sat"
-                                                    ]);
+                                                    handleRecurrenceChange("daysOfWeek", ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]);
                                                 }
                                             }}
                                             disabled={isDisabled}
@@ -367,7 +344,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                             </div>
                         </>
                     )}
-
 
                     <div className="field-group">
                         <label htmlFor="eventStartTime">Start Time:</label>
@@ -394,7 +370,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         />
                     </div>
 
-                    {/* Public */}
                     <div className="field-group">
                         <label>
                             <input
@@ -408,7 +383,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         </label>
                     </div>
 
-                    {/* Image */}
                     <div className="field-group full-width">
                         <label>Upload Image (optional):</label>
                         <input
@@ -428,7 +402,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="form-actions full-width">
                         <button type="submit" className="save-btn" disabled={isDisabled}>
                             {loadingLocations
@@ -441,7 +414,6 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                                             ? "Update Event"
                                             : "Save Event"}
                         </button>
-
                         <button type="button" className="cancel-btn" onClick={onCancel} disabled={isDisabled}>
                             Cancel
                         </button>

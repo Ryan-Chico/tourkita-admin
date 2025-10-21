@@ -1,0 +1,280 @@
+/* --- Fonts (Ensure these are in your main index.css) --- */
+/* @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Poppins:wght@400;500;600&display=swap'); */
+
+/* --- Modal Overlay & Content --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid #E4E4E7;
+}
+
+.modal-content h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #373A3C;
+    margin: 0;
+    text-align: left;
+}
+
+/* --- Form Layout --- */
+.marker-form {
+    padding: 24px 32px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grid-col-span-2 {
+    grid-column: span 2 / span 2;
+}
+
+/* --- Form Elements Styling --- */
+.field-group label {
+    font-weight: 500;
+    color: #3F3F46;
+    font-size: 0.875rem;
+}
+
+.field-group input,
+.field-group textarea,
+.field-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D4D4D8;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    color: #27272A;
+    background-color: #FAFAFA;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-group input:focus,
+.field-group textarea:focus,
+.field-group select:focus {
+    outline: none;
+    border-color: #8D6E63;
+    box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.1);
+    background-color: #FFFFFF;
+}
+
+/* --- Day Chips for Recurrence --- */
+.recurrence-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.day-chip {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #5D4037;
+    background-color: #F8F7F4;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #D7CCC8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.day-chip input {
+    display: none;
+}
+
+.day-chip:hover {
+    border-color: #A1887F;
+}
+
+.day-chip.active {
+    background-color: #6D4C41;
+    color: #FFFFFF;
+    border-color: #6D4C41;
+}
+
+/* --- Toggle Switch --- */
+.toggle-group {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #E4E4E7;
+}
+
+.toggle-group>label {
+    font-weight: 500;
+    color: #3F3F46;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 28px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input:checked+.slider {
+    background-color: #8D6E63;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #8D6E63;
+}
+
+input:checked+.slider:before {
+    transform: translateX(22px);
+}
+
+/* --- Map & Actions --- */
+.map-container.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.selected-address {
+    margin-top: 8px;
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #5D4037;
+}
+
+.form-actions {
+    padding: 16px 32px;
+    border-top: 1px solid #E4E4E7;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background-color: #F9FAFB;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.save-btn {
+    background-color: #8D6E63;
+    color: #FFFFFF;
+    border: 1px solid #8D6E63;
+}
+
+.save-btn:hover:not(:disabled) {
+    background-color: #795548;
+}
+
+.cancel-btn {
+    background-color: #FFFFFF;
+    color: #3F3F46;
+    border: 1px solid #D4D4D8;
+}
+
+.cancel-btn:hover:not(:disabled) {
+    border-color: #A1A1AA;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-col-span-2 {
+        grid-column: span 1 / span 1;
+    }
+}

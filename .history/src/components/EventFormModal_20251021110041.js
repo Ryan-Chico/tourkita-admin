@@ -394,20 +394,19 @@ const EventFormModal = ({ isOpen, formData, setFormData, onCancel, onUpdate }) =
                         />
                     </div>
 
-                    {/* Public */}
-                    <div className="field-group">
-                        <label>
+                    <div className="field-group toggle-group">
+                        <label>Open to the public?</label>
+                        <label className="toggle-switch">
                             <input
                                 type="checkbox"
                                 name="openToPublic"
                                 checked={formData.openToPublic || false}
                                 onChange={handleChange}
                                 disabled={isDisabled}
-                            /> {" "}
-                            Open to the public?
+                            />
+                            <span className="slider"></span>
                         </label>
                     </div>
-
                     {/* Image */}
                     <div className="field-group full-width">
                         <label>Upload Image (optional):</label>

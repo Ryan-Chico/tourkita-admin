@@ -7,13 +7,13 @@ import { db } from '../firebase';
 import ExportButtons from '../components/ExportButtons';
 
 const UserManagement = () => {
+    // --- STATE MANAGEMENT ---
     const [search, setSearch] = useState('');
     const [viewFilter, setViewFilter] = useState('all');
     const [loading, setLoading] = useState(true);
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
-
     const [allUsers, setAllUsers] = useState([]);
     const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
 
@@ -33,6 +33,7 @@ const UserManagement = () => {
         actions: true,
     });
 
+    // --- HELPER FUNCTIONS ---
     const handleToggleColumn = (col) => {
         setColumnVisibility(prev => ({ ...prev, [col]: !prev[col] }));
     };
@@ -43,6 +44,7 @@ const UserManagement = () => {
         return date.toLocaleDateString();
     };
 
+    // --- DATA FETCHING ---
     useEffect(() => {
         setLoading(true);
         const usersRef = collection(db, 'users');
@@ -64,23 +66,10 @@ const UserManagement = () => {
                 };
 
                 if (status === 'archived') {
-                    return {
-                        ...baseData,
-                        status: 'archived',
-                        activeStatus: false,
-                        archivedDate: formatDate(data.archivedAt),
-                        archiveReason: data.archiveReason || 'N/A',
-                    };
+                    return { ...baseData, status: 'archived', activeStatus: false, archivedDate: formatDate(data.archivedAt), archiveReason: data.archiveReason || 'N/A' };
                 }
                 if (status === 'guest') {
-                    return {
-                        ...baseData,
-                        name: 'Guest User',
-                        email: '',
-                        status: 'guest',
-                        userType: 'Guest',
-                        activeStatus: data.activeStatus ?? false,
-                    };
+                    return { ...baseData, name: 'Guest User', email: '', status: 'guest', userType: 'Guest', activeStatus: data.activeStatus ?? false };
                 }
                 return { ...baseData, status: 'registered', activeStatus: data.activeStatus ?? false };
             });
@@ -103,12 +92,12 @@ const UserManagement = () => {
         };
     }, []);
 
+    // --- CORE FUNCTIONALITY ---
     const handleViewArchived = async () => {
         if (isArchivedUnlocked) {
             setViewFilter('archived');
             return;
         }
-
         const password = prompt('For security, please re-enter your password to view archived users:');
         if (!password) return;
 
@@ -123,7 +112,6 @@ const UserManagement = () => {
                 setIsArchivedUnlocked(true);
                 setViewFilter('archived');
             } catch (error) {
-                console.error("Re-authentication failed:", error);
                 alert('Incorrect password. Access to archives denied.');
             }
         }
@@ -136,20 +124,12 @@ const UserManagement = () => {
         try {
             const userRef = doc(db, 'users', userId);
             const userSnap = await getDoc(userRef);
-
             if (!userSnap.exists()) {
                 alert('User not found.');
                 return;
             }
             const userData = userSnap.data();
-
-            await setDoc(doc(db, 'archived_users', userId), {
-                ...userData,
-                uid: userId,
-                archivedAt: serverTimestamp(),
-                archiveReason: reason,
-            });
-
+            await setDoc(doc(db, 'archived_users', userId), { ...userData, uid: userId, archivedAt: serverTimestamp(), archiveReason: reason });
             await deleteDoc(userRef);
             alert(`✅ User ${userData.email || userId} has been archived.`);
         } catch (error) {
@@ -158,25 +138,31 @@ const UserManagement = () => {
         }
     };
 
+    // --- DATA PROCESSING & FILTERING ---
     const filteredUsers = useMemo(() => {
         return allUsers.filter(user => {
             const matchesSearch =
                 user.name?.toLowerCase().includes(search.toLowerCase()) ||
                 user.email?.toLowerCase().includes(search.toLowerCase()) ||
                 user.id.toLowerCase().includes(search.toLowerCase());
-
-            const matchesView =
-                (viewFilter === 'all' && user.status !== 'archived') ||
-                (user.status === viewFilter);
-
+            const matchesView = (viewFilter === 'all' && user.status !== 'archived') || (user.status === viewFilter);
             const regDate = user.registeredDate !== 'N/A' ? new Date(user.registeredDate) : null;
             const matchesDateFrom = !dateFrom || (regDate && regDate >= new Date(dateFrom));
             const matchesDateTo = !dateTo || (regDate && regDate <= new Date(dateTo));
-
             return matchesSearch && matchesView && matchesDateFrom && matchesDateTo;
         }).sort((a, b) => new Date(b.registeredDate) - new Date(a.registeredDate));
     }, [allUsers, search, viewFilter, dateFrom, dateTo]);
 
+    // NEW: Dynamically generate the list of columns available for toggling
+    const availableColumns = useMemo(() => {
+        const allCols = Object.keys(columnVisibility);
+        if (viewFilter === 'archived') {
+            return allCols.filter(col => col !== 'activeStatus' && col !== 'actions');
+        }
+        return allCols.filter(col => col !== 'archivedDate' && col !== 'archiveReason');
+    }, [viewFilter]);
+
+    // Derived counts for the summary boxes
     const activeUsers = allUsers.filter(u => u.status !== 'archived');
     const totalUsers = activeUsers.length;
     const registeredCount = activeUsers.filter(u => u.status === 'registered').length;
@@ -187,16 +173,10 @@ const UserManagement = () => {
     const onlineGuestCount = allUsers.filter(u => u.status === 'guest' && u.activeStatus).length;
     const offlineGuestCount = allUsers.filter(u => u.status === 'guest' && !u.activeStatus).length;
 
-    const colSpanCount = useMemo(() => {
-        return Object.keys(columnVisibility).filter(key => {
-            if (!columnVisibility[key]) return false;
-            if (viewFilter === 'archived' && (key === 'activeStatus' || key === 'actions')) return false;
-            if (viewFilter !== 'archived' && (key === 'archivedDate' || key === 'archiveReason')) return false;
-            return true;
-        }).length;
-    }, [columnVisibility, viewFilter]);
+    // Dynamically calculate colSpan for "no data" message
+    const colSpanCount = useMemo(() => availableColumns.filter(col => columnVisibility[col]).length, [availableColumns, columnVisibility]);
 
-
+    // --- RENDER ---
     return (
         <div className="dashboard-wrapper">
             <Sidebar />
@@ -219,19 +199,11 @@ const UserManagement = () => {
                     <div className="tab-date-row">
                         <div className="tab-bar markers-tabs">
                             {['all', 'registered', 'guest'].map(tab => (
-                                <button
-                                    key={tab}
-                                    className={`mtab ${viewFilter === tab ? 'active' : ''}`}
-                                    onClick={() => setViewFilter(tab)}
-                                >
+                                <button key={tab} className={`mtab ${viewFilter === tab ? 'active' : ''}`} onClick={() => setViewFilter(tab)}>
                                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
                                 </button>
                             ))}
-                            <button
-                                key="archived"
-                                className={`mtab ${viewFilter === 'archived' ? 'active' : ''}`}
-                                onClick={handleViewArchived}
-                            >
+                            <button key="archived" className={`mtab ${viewFilter === 'archived' ? 'active' : ''}`} onClick={handleViewArchived}>
                                 Archived
                             </button>
                         </div>
@@ -240,7 +212,8 @@ const UserManagement = () => {
                                 <button className="dropdown-btn" onClick={() => setShowDropdown(prev => !prev)}>Columns ▼</button>
                                 {showDropdown && (
                                     <div className="dropdown-content">
-                                        {Object.keys(columnVisibility).map(col => (
+                                        {/* MODIFIED: Map over the dynamic availableColumns list */}
+                                        {availableColumns.map(col => (
                                             <label key={col} className="dropdown-item">
                                                 <input type="checkbox" checked={columnVisibility[col]} onChange={() => handleToggleColumn(col)} />
                                                 {col.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
@@ -285,11 +258,7 @@ const UserManagement = () => {
                             <tbody>
                                 {loading ? (
                                     [...Array(5)].map((_, i) => (
-                                        <tr key={i}>
-                                            {[...Array(colSpanCount)].map((_, j) => (
-                                                <td key={j}><div className="skeleton skeleton-line"></div></td>
-                                            ))}
-                                        </tr>
+                                        <tr key={i}>{[...Array(colSpanCount)].map((_, j) => <td key={j}><div className="skeleton skeleton-line"></div></td>)}</tr>
                                     ))
                                 ) : filteredUsers.length > 0 ? (
                                     filteredUsers.map((user) => (
@@ -301,7 +270,6 @@ const UserManagement = () => {
                                             {columnVisibility.gender && <td data-label="Gender">{user.gender || '—'}</td>}
                                             {columnVisibility.contactNumber && <td data-label="Contact">{user.contactNumber || '—'}</td>}
                                             {columnVisibility.status && <td data-label="Status">{user.status.charAt(0).toUpperCase() + user.status.slice(1)}</td>}
-                                            {/* --- MODIFIED CELLS --- */}
                                             {viewFilter !== 'archived' && columnVisibility.activeStatus && <td data-label="Active Status">{user.activeStatus ? 'Online' : 'Offline'}</td>}
                                             {columnVisibility.userType && <td data-label="User Type">{user.userType || 'N/A'}</td>}
                                             {columnVisibility.registeredDate && <td data-label="Registered">{user.registeredDate}</td>}
@@ -309,19 +277,13 @@ const UserManagement = () => {
                                             {viewFilter === 'archived' && columnVisibility.archiveReason && <td data-label="Archive Reason">{user.archiveReason}</td>}
                                             {viewFilter !== 'archived' && columnVisibility.actions && (
                                                 <td data-label="Actions">
-                                                    {user.status === 'registered' && (
-                                                        <button className="archive-btn" onClick={() => handleArchive(user.id)}>Archive</button>
-                                                    )}
+                                                    {user.status === 'registered' && (<button className="archive-btn" onClick={() => handleArchive(user.id)}>Archive</button>)}
                                                 </td>
                                             )}
                                         </tr>
                                     ))
                                 ) : (
-                                    <tr>
-                                        <td colSpan={colSpanCount} className="no-data">
-                                            No users found for the selected filters.
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan={colSpanCount} className="no-data">No users found for the selected filters.</td></tr>
                                 )}
                             </tbody>
                         </table>

@@ -1,0 +1,251 @@
+/* --- Fonts (Ensure these are in your main index.css) --- */
+/* @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Poppins:wght@400;500;600&display=swap'); */
+
+/* --- Modal Overlay & Content --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-content {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* --- Modal Header --- */
+.modal-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid #E4E4E7;
+}
+
+.modal-header h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #373A3C;
+    margin: 0;
+}
+
+.modal-header p {
+    margin: 4px 0 0 0;
+    color: #71717A;
+}
+
+/* --- Form Layout & Structure --- */
+.event-form {
+    padding: 32px;
+    overflow-y: auto;
+    /* Allows form content to scroll */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.form-section {
+    border: 1px solid #E4E4E7;
+    border-radius: 8px;
+    padding: 24px;
+    display: contents;
+    /* Allows fieldset to participate in the parent grid */
+}
+
+.form-section legend {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6D4C41;
+    /* Heritage brown color */
+    padding: 0 8px;
+    margin-left: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grid-col-span-2 {
+    grid-column: span 2 / span 2;
+}
+
+.form-grid {
+    display: contents;
+    /* Participate in parent grid */
+}
+
+/* --- Form Elements Styling --- */
+.form-group label {
+    font-weight: 500;
+    color: #3F3F46;
+    font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D4D4D8;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    color: #27272A;
+    background-color: #FAFAFA;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #8D6E63;
+    box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.1);
+    background-color: #FFFFFF;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #27272A;
+}
+
+.checkbox-label input {
+    width: auto;
+}
+
+/* --- Day Chips (Recurrence) --- */
+.day-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.day-chip {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #5D4037;
+    background-color: #F8F7F4;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #D7CCC8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    /* Prevents text selection on click */
+}
+
+.day-chip input {
+    display: none;
+    /* Hide the actual checkbox */
+}
+
+.day-chip:hover {
+    border-color: #A1887F;
+}
+
+.day-chip.active {
+    background-color: #6D4C41;
+    color: #FFFFFF;
+    border-color: #6D4C41;
+}
+
+/* --- Map & Location --- */
+.map-container {
+    grid-column: span 2 / span 2;
+    transition: opacity 0.3s;
+}
+
+.map-container.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.selected-address {
+    margin-top: 8px;
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #5D4037;
+}
+
+/* --- Modal Footer & Buttons --- */
+.modal-footer {
+    padding: 16px 32px;
+    border-top: 1px solid #E4E4E7;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background-color: #F9FAFB;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #8D6E63;
+    color: #FFFFFF;
+    border: 1px solid #8D6E63;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #795548;
+    border-color: #795548;
+}
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    color: #3F3F46;
+    border: 1px solid #D4D4D8;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    border-color: #A1A1AA;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .event-form {
+        grid-template-columns: 1fr;
+        /* Stack to a single column */
+    }
+
+    .grid-col-span-2 {
+        grid-column: span 1 / span 1;
+        /* Reset column span */
+    }
+}

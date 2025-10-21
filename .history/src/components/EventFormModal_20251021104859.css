@@ -1,0 +1,159 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    animation: slideFadeIn 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+@keyframes slideFadeIn {
+    from {
+        transform: translateY(-15px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-content h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.marker-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-group label {
+    font-weight: 500;
+    color: #444;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-group input,
+.field-group textarea,
+.field-group select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fafafa;
+    transition: border-color 0.2s, background-color 0.2s;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-group input\:focus,
+.field-group textarea\:focus,
+.field-group select\:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+}
+
+.field-row {
+    display: flex;
+    gap: 1rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-row .field-group {
+    flex: 1;
+}
+
+.recurrence-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+    margin-top: 0.4rem;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.recurrence-days label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    background: #f7f7f7;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.recurrence-days label\:hover {
+    background-color: #eef4ff;
+    border-color: #007bff;
+}
+
+.recurrence-days input {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.recurrence-days .all-days {
+    background: #e9f5ff;
+    border-color: #007bff;
+    font-weight: 600;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.map-wrapper {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    transition: opacity 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.map-wrapper.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.selected-address {
+    margin-top: 5px;
+    font-style: italic;
+    color: #555;
+    font-family: 'Segoe UI', sans-serif;
+}

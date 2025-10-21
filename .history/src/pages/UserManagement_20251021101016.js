@@ -7,6 +7,7 @@ import { db } from '../firebase';
 import ExportButtons from '../components/ExportButtons';
 
 const UserManagement = () => {
+    // --- ORIGINAL STATE ---
     const [search, setSearch] = useState('');
     const [viewFilter, setViewFilter] = useState('all');
     const [loading, setLoading] = useState(true);
@@ -14,9 +15,11 @@ const UserManagement = () => {
     const [dateTo, setDateTo] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
 
+    // --- MODIFIED & NEW STATE ---
     const [allUsers, setAllUsers] = useState([]);
     const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
 
+    // Columns state now includes archived-specific fields
     const [columnVisibility, setColumnVisibility] = useState({
         userId: true,
         email: true,
@@ -187,6 +190,7 @@ const UserManagement = () => {
     const onlineGuestCount = allUsers.filter(u => u.status === 'guest' && u.activeStatus).length;
     const offlineGuestCount = allUsers.filter(u => u.status === 'guest' && !u.activeStatus).length;
 
+    // Calculate the correct colSpan dynamically for the "no data" message
     const colSpanCount = useMemo(() => {
         return Object.keys(columnVisibility).filter(key => {
             if (!columnVisibility[key]) return false;
@@ -274,6 +278,7 @@ const UserManagement = () => {
                                     {columnVisibility.gender && <th>Gender</th>}
                                     {columnVisibility.contactNumber && <th>Contact Number</th>}
                                     {columnVisibility.status && <th>Status</th>}
+                                    {/* --- MODIFIED COLUMNS --- */}
                                     {viewFilter !== 'archived' && columnVisibility.activeStatus && <th>Active Status</th>}
                                     {columnVisibility.userType && <th>User Type</th>}
                                     {columnVisibility.registeredDate && <th>Registered Date</th>}

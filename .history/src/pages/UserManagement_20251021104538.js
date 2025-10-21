@@ -13,10 +13,11 @@ const UserManagement = () => {
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
-
+--
     const [allUsers, setAllUsers] = useState([]);
     const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
 
+    // Columns state now includes archived-specific fields
     const [columnVisibility, setColumnVisibility] = useState({
         userId: true,
         email: true,

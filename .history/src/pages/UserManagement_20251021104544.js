@@ -17,6 +17,7 @@ const UserManagement = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
 
+    // Columns state now includes archived-specific fields
     const [columnVisibility, setColumnVisibility] = useState({
         userId: true,
         email: true,

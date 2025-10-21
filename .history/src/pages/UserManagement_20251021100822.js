@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import './UserManagement.css';
 import Sidebar from '../components/Sidebar';
 import { collection, doc, getDoc, setDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { getAuth, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'; // Added for re-authentication
 import { db } from '../firebase';
 import ExportButtons from '../components/ExportButtons';
 
 const UserManagement = () => {
+    // --- ORIGINAL STATE ---
     const [search, setSearch] = useState('');
     const [viewFilter, setViewFilter] = useState('all');
     const [loading, setLoading] = useState(true);
@@ -14,9 +15,11 @@ const UserManagement = () => {
     const [dateTo, setDateTo] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const [allUsers, setAllUsers] = useState([]);
-    const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
+    // --- MODIFIED & NEW STATE ---
+    const [allUsers, setAllUsers] = useState([]); // Changed name for clarity
+    const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false); // New state for archive security
 
+    // Added new columns for archived data
     const [columnVisibility, setColumnVisibility] = useState({
         userId: true,
         email: true,
@@ -28,8 +31,8 @@ const UserManagement = () => {
         activeStatus: true,
         userType: true,
         registeredDate: true,
-        archivedDate: true,
-        archiveReason: true,
+        archivedDate: true, // New column for archived view
+        archiveReason: true, // New column for archived view
         actions: true,
     });
 
@@ -37,17 +40,19 @@ const UserManagement = () => {
         setColumnVisibility(prev => ({ ...prev, [col]: !prev[col] }));
     };
 
+    // Helper to format dates consistently
     const formatDate = (dateValue) => {
         if (!dateValue) return 'N/A';
         const date = dateValue.toDate ? dateValue.toDate() : new Date(dateValue);
         return date.toLocaleDateString();
     };
 
+    // --- UPDATED DATA FETCHING ---
     useEffect(() => {
         setLoading(true);
         const usersRef = collection(db, 'users');
         const guestsRef = collection(db, 'guests');
-        const archivedRef = collection(db, 'archived_users');
+        const archivedRef = collection(db, 'archived_users'); // Added listener for archived users
 
         const updateState = (snapshot, status) => {
             const fetchedData = snapshot.docs.map(doc => {
@@ -103,6 +108,7 @@ const UserManagement = () => {
         };
     }, []);
 
+    // --- NEW: PASSWORD RE-AUTHENTICATION FOR ARCHIVED TAB ---
     const handleViewArchived = async () => {
         if (isArchivedUnlocked) {
             setViewFilter('archived');
@@ -110,7 +116,7 @@ const UserManagement = () => {
         }
 
         const password = prompt('For security, please re-enter your password to view archived users:');
-        if (!password) return;
+        if (!password) return; // User cancelled
 
         const auth = getAuth();
         const user = auth.currentUser;
@@ -158,6 +164,7 @@ const UserManagement = () => {
         }
     };
 
+    // --- ORIGINAL FILTERING LOGIC (ADAPTED FOR NEW STATE) ---
     const filteredUsers = useMemo(() => {
         return allUsers.filter(user => {
             const matchesSearch =
@@ -165,6 +172,7 @@ const UserManagement = () => {
                 user.email?.toLowerCase().includes(search.toLowerCase()) ||
                 user.id.toLowerCase().includes(search.toLowerCase());
 
+            // This logic correctly separates "All Users" from "Archived"
             const matchesView =
                 (viewFilter === 'all' && user.status !== 'archived') ||
                 (user.status === viewFilter);
@@ -177,6 +185,7 @@ const UserManagement = () => {
         }).sort((a, b) => new Date(b.registeredDate) - new Date(a.registeredDate));
     }, [allUsers, search, viewFilter, dateFrom, dateTo]);
 
+    // --- ORIGINAL COUNTING LOGIC (ADAPTED FOR NEW STATE) ---
     const activeUsers = allUsers.filter(u => u.status !== 'archived');
     const totalUsers = activeUsers.length;
     const registeredCount = activeUsers.filter(u => u.status === 'registered').length;
@@ -184,17 +193,10 @@ const UserManagement = () => {
     const archivedCount = allUsers.filter(u => u.status === 'archived').length;
     const onlineCount = activeUsers.filter(u => u.activeStatus).length;
     const offlineCount = totalUsers - onlineCount;
+
+    // This is a simplified version of your original online/offline guest count
     const onlineGuestCount = allUsers.filter(u => u.status === 'guest' && u.activeStatus).length;
     const offlineGuestCount = allUsers.filter(u => u.status === 'guest' && !u.activeStatus).length;
-
-    const colSpanCount = useMemo(() => {
-        return Object.keys(columnVisibility).filter(key => {
-            if (!columnVisibility[key]) return false;
-            if (viewFilter === 'archived' && (key === 'activeStatus' || key === 'actions')) return false;
-            if (viewFilter !== 'archived' && (key === 'archivedDate' || key === 'archiveReason')) return false;
-            return true;
-        }).length;
-    }, [columnVisibility, viewFilter]);
 
 
     return (
@@ -203,6 +205,7 @@ const UserManagement = () => {
             <main className="dashboard-main">
                 <h2>User Management</h2>
                 <div className="main-content">
+                    {/* --- RETAINED ORIGINAL UI --- */}
                     <div className="summary-row">
                         <div className="user-count-summary">
                             <div className="count-box"><span className="label">All Users</span><span className="count">{totalUsers}</span></div>
@@ -230,7 +233,7 @@ const UserManagement = () => {
                             <button
                                 key="archived"
                                 className={`mtab ${viewFilter === 'archived' ? 'active' : ''}`}
-                                onClick={handleViewArchived}
+                                onClick={handleViewArchived} // Use special handler for this tab
                             >
                                 Archived
                             </button>
@@ -274,19 +277,19 @@ const UserManagement = () => {
                                     {columnVisibility.gender && <th>Gender</th>}
                                     {columnVisibility.contactNumber && <th>Contact Number</th>}
                                     {columnVisibility.status && <th>Status</th>}
-                                    {viewFilter !== 'archived' && columnVisibility.activeStatus && <th>Active Status</th>}
+                                    {columnVisibility.activeStatus && <th>Active Status</th>}
                                     {columnVisibility.userType && <th>User Type</th>}
                                     {columnVisibility.registeredDate && <th>Registered Date</th>}
                                     {viewFilter === 'archived' && columnVisibility.archivedDate && <th>Archived Date</th>}
                                     {viewFilter === 'archived' && columnVisibility.archiveReason && <th>Archive Reason</th>}
-                                    {viewFilter !== 'archived' && columnVisibility.actions && <th>Actions</th>}
+                                    {columnVisibility.actions && <th>Actions</th>}
                                 </tr>
                             </thead>
                             <tbody>
                                 {loading ? (
                                     [...Array(5)].map((_, i) => (
                                         <tr key={i}>
-                                            {[...Array(colSpanCount)].map((_, j) => (
+                                            {Object.values(columnVisibility).filter(v => v).map((_, j) => (
                                                 <td key={j}><div className="skeleton skeleton-line"></div></td>
                                             ))}
                                         </tr>
@@ -301,16 +304,18 @@ const UserManagement = () => {
                                             {columnVisibility.gender && <td data-label="Gender">{user.gender || '—'}</td>}
                                             {columnVisibility.contactNumber && <td data-label="Contact">{user.contactNumber || '—'}</td>}
                                             {columnVisibility.status && <td data-label="Status">{user.status.charAt(0).toUpperCase() + user.status.slice(1)}</td>}
-                                            {/* --- MODIFIED CELLS --- */}
-                                            {viewFilter !== 'archived' && columnVisibility.activeStatus && <td data-label="Active Status">{user.activeStatus ? 'Online' : 'Offline'}</td>}
+                                            {columnVisibility.activeStatus && <td data-label="Active Status">{user.activeStatus ? 'Online' : 'Offline'}</td>}
                                             {columnVisibility.userType && <td data-label="User Type">{user.userType || 'N/A'}</td>}
                                             {columnVisibility.registeredDate && <td data-label="Registered">{user.registeredDate}</td>}
                                             {viewFilter === 'archived' && columnVisibility.archivedDate && <td data-label="Archived Date">{user.archivedDate}</td>}
                                             {viewFilter === 'archived' && columnVisibility.archiveReason && <td data-label="Archive Reason">{user.archiveReason}</td>}
-                                            {viewFilter !== 'archived' && columnVisibility.actions && (
+                                            {columnVisibility.actions && (
                                                 <td data-label="Actions">
                                                     {user.status === 'registered' && (
                                                         <button className="archive-btn" onClick={() => handleArchive(user.id)}>Archive</button>
+                                                    )}
+                                                    {user.status === 'archived' && (
+                                                        <span className="archived-text">Archived</span>
                                                     )}
                                                 </td>
                                             )}
@@ -318,7 +323,7 @@ const UserManagement = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={colSpanCount} className="no-data">
+                                        <td colSpan={Object.values(columnVisibility).filter(Boolean).length} className="no-data">
                                             No users found for the selected filters.
                                         </td>
                                     </tr>

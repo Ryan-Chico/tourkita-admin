@@ -7,6 +7,7 @@ import { db } from '../firebase';
 import ExportButtons from '../components/ExportButtons';
 
 const UserManagement = () => {
+    // --- ORIGINAL STATE ---
     const [search, setSearch] = useState('');
     const [viewFilter, setViewFilter] = useState('all');
     const [loading, setLoading] = useState(true);
@@ -14,9 +15,11 @@ const UserManagement = () => {
     const [dateTo, setDateTo] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
 
+    // --- MODIFIED & NEW STATE ---
     const [allUsers, setAllUsers] = useState([]);
     const [isArchivedUnlocked, setIsArchivedUnlocked] = useState(false);
 
+    // Columns state now includes archived-specific fields
     const [columnVisibility, setColumnVisibility] = useState({
         userId: true,
         email: true,
