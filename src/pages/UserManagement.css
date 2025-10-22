@@ -299,3 +299,40 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
+.user-type-chart {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fdf1e7;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.user-type-chart h3 {
+    color: #5c3d2e;
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.user-type-chart .recharts-wrapper {
+    margin: 0 auto;
+}
+
+.recharts-legend-item text {
+    font-size: 13px;
+    fill: #5c3d2e;
+}
+
+.recharts-tooltip-wrapper {
+    font-size: 13px;
+    color: #4b2e2e;
+}
+
+
+.user-type-chart .skeleton {
+    height: 250px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+}
