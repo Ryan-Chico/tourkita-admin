@@ -25,6 +25,7 @@ const AnalysisReport = () => {
     const [ratingFilter, setRatingFilter] = useState('top');
     const [showAll, setShowAll] = useState(false);
     const [groupAge, setGroupAge] = useState(false);
+    const [registeredCount, setRegisteredCount] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,9 +41,15 @@ const AnalysisReport = () => {
                         gender: data.gender || '',
                         userType: (data.userType || '').toLowerCase(),
                         registeredDate: data.createdAt || '',
+                        status: data.status || 'Unregistered',
                     };
                 });
                 setUsers(userList);
+
+                // ✅ Count only users with "Registered" status
+                const registeredCount = userList.filter(u => u.status.toLowerCase() === 'registered').length;
+                setRegisteredCount(registeredCount);
+
 
                 const feedbackSnapshot = await getDocs(collection(db, 'feedbacks'));
                 const feedbackList = feedbackSnapshot.docs.map(doc => doc.data());
@@ -167,7 +174,7 @@ const AnalysisReport = () => {
         }));
     }, [filteredUsers, filter]);
 
-    // ✅ Gender Chart
+    // Gender Chart
     const genderChartData = useMemo(() => {
         const grouped = {};
         filteredUsers.forEach(u => {
@@ -183,7 +190,7 @@ const AnalysisReport = () => {
         return Object.entries(grouped).map(([period, genders]) => ({ period, ...genders }));
     }, [filteredUsers, filter, selectedYear]);
 
-    // ✅ User Type Chart
+    // User Type Chart
     const userTypeChartData = useMemo(() => {
         const grouped = {};
         filteredUsers.forEach(u => {
@@ -199,7 +206,7 @@ const AnalysisReport = () => {
         return Object.entries(grouped).map(([period, types]) => ({ period, ...types }));
     }, [filteredUsers, filter, selectedYear]);
 
-    // ✅ Age Group Chart
+    // Age Group Chart
     const ageGroupChartData = useMemo(() => {
         const ageGroups = ['<18', '18-25', '26-35', '36-45', '46+'];
         const grouped = {};
@@ -260,7 +267,8 @@ const AnalysisReport = () => {
                             <div className="card brown">
                                 <FaUsers size={22} color="#3498DB" />
                                 <h2>Registered Users</h2>
-                                <p className="big-number">{filteredUsers.length.toLocaleString()}</p>
+                                <p className="big-number">{registeredCount.toLocaleString()}</p>
+
                             </div>
                             <div className="card brown">
                                 <FaMapMarkerAlt size={22} color="#9B59B6" />

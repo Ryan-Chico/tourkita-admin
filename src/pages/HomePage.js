@@ -43,6 +43,10 @@ const HomePage = () => {
             }
         };
     }, []);
+
+    const downloadApp = () => {
+        window.location.href = "https://firebasestorage.googleapis.com/v0/b/admin-login-244c5.firebasestorage.app/o/models%2Fapk%2FTourKita.apk?alt=media&token=b1695e8a-ed87-427a-b731-3e656059ab02";
+    }
     useEffect(() => {
         const fadeElements = document.querySelectorAll('.fade-in, .fade-in-up, .fade-in-left, .fade-in-right, .fade-in-zoom');
         const handleScroll = () => {
@@ -84,7 +88,7 @@ const HomePage = () => {
                     <h2>Ready to Explore?</h2>
                     <p>Experience the history of Intramuros like never before with TourKita</p>
                     <div className="download-buttons">
-                        <button className="download-btn android">
+                        <button className="download-btn android" onClick={downloadApp}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="btn-icon">
                                 <path d="M21.5,12a9.5,9.5,0,0,0-9.5-9.5A9.5,9.5,0,0,0,2.5,12a9.5,9.5,0,0,0,9.5,9.5A9.5,9.5,0,0,0,21.5,12Zm-17,0A7.5,7.5,0,0,1,12,4.5,7.5,7.5,0,0,1,19.5,12,7.5,7.5,0,0,1,12,19.5,7.5,7.5,0,0,1,4.5,12Zm5.53,3.67,4.88-2.58a.5.5,0,0,0,0-.9L10,9.55a.5.5,0,0,0-.74.45v5.22a.5.5,0,0,0,.77.45Z" />
                             </svg>

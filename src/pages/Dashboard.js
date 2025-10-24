@@ -18,7 +18,7 @@ const Dashboard = () => {
     const [topRatedDestinations, setTopRatedDestinations] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // 🔹 Real-time listener for users + guests
+    // Real-time listener for users + guests
     useEffect(() => {
         const usersRef = collection(db, "users");
         const guestsRef = collection(db, "guests");
@@ -51,7 +51,7 @@ const Dashboard = () => {
         return () => unsubscribeUsers();
     }, []);
 
-    // ✅ Compute active user stats after data loads
+    //  Compute active user stats after data loads
     const { activeUsers, activeRegistered, activeGuests } = useMemo(() => {
         const nonArchived = users.filter(u => u.status !== "archived");
         const active = nonArchived.filter(u => u.activeStatus === true);
@@ -129,17 +129,17 @@ const Dashboard = () => {
                             <div className="card brown">
                                 <p>Online: All Users</p>
                                 <h2>{activeUsers.length}</h2>
-                                <span style={getPercentageColor(15.03)}>+15.03%</span>
+                          
                             </div>
                             <div className="card brown">
                                 <p>Online: Registered Users</p>
                                 <h2>{activeRegistered.length}</h2>
-                                <span style={getPercentageColor(11.01)}>+11.01%</span>
+                              
                             </div>
                             <div className="card brown">
                                 <p>Online: Guest Users</p>
                                 <h2>{activeGuests.length}</h2>
-                                <span style={getPercentageColor(-6.08)}>-6.08%</span>
+                               
                             </div>
                         </>
                     )}

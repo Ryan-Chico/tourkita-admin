@@ -120,7 +120,7 @@ const UserManagement = () => {
             );
             setUsers(updatedUsers);
 
-            alert(`✅ User ${userData.email || userId} has been archived.`);
+            alert(`User ${userData.email || userId} has been archived.`);
         } catch (error) {
             console.error('Error archiving user:', error);
             alert('Error archiving user. See console for details.');
@@ -233,7 +233,7 @@ const UserManagement = () => {
                         )}
                     </div>
 
-                    {/* 🔽 Table Section */}
+                    {/*  Table Section */}
                     <div className="tab-date-row">
                         <div className="tab-bar markers-tabs">
                             {['all', 'registered', 'archived'].map(tab => (
